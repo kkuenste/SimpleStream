@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Development Plan</title>
+</head>
+
+	<h1> Development Plan</h1>
+	
+	<h4> Relational Schema:</h4>
+	<p>subredit(sub_id, name, description) </p>
+	<p>&nbsp;&nbsp;&nbsp;sub_id -> name, description </p>
+	<p>user(user_id, email, picture, first_name, last_name, sub_id)</p>
+	<p>&nbsp;&nbsp;&nbsp;user_id -> email, picture, first_name, last_name, sub_id </p>
+	<p>post(post_id, sub_id, content, date, votes, post_name, comment_id)</p>
+	<p>&nbsp;&nbsp;&nbsp;post_id -> sub_id, content, date, votes, post_name, comment_id </p>
+	<p>perference(preference_id, user_id, post_id, date, description)</p> 
+	<p>&nbsp;&nbsp;&nbsp;preference_id -> user_id, post_id, date, description </p>
+
+	<h4>Software Tools:</h4>
+	<p>MySQL Database with a python connection using flask, and angular, HTML and CSS for the frontend.</p>
+
+	<h4>Our Data:</h4>
+	<p>We are getting our data from the Reddit API using a python wrapper.</p>
+
+	<h4>Labor Division:</h4>
+	<p>Katie and Claire will focus on the frontend, while Tyler and Ryan will focus on the backend. However, we plan on each person still working a little with each aspect of the project. 
+
+	<h4>Project Timeline:</h4>
+	<p>Week of October 2nd: Setting up the development environment.</p>
+	<p>Week of October 9th: Get data into the database.</p>
+	<p>Week of October 16th: Get the frontend to dislpay some basic data.</p>
+	<p>Week of October 23rd (Fall Break): Begin advanced functions.</p>
+	<p>Week of October 30th: First demo, continue to work on frontend and advanced functions.</p>
+	<p>November: Optimize the functions, streamline the frontend, add new features if time.</p> 
+</html>
