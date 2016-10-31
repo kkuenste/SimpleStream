@@ -29,12 +29,22 @@
  
       <div class="jumbotron">
         <h1>Account</h1>
-        <form class="form-account">
+        <form id="form-account">
   
-        <label for="inputPassword" class="sr-only">New Password</label>
+
+	<label for="inputPassword" class="sr-only">New Password</label>
         <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="New Password" required>
-       
+
+	<label for="inputEmail" class="sr-only">email</label>
+        <input type="text" name="inputEmail" id="inputEmail" class="form-control" placeholder="email" required>
+   
         <button id="btnSavePassword" class="btn btn-lg btn-primary btn-block" type="button">Save password</button>
+	</form>
+
+	<form id="form-account-2">
+	<label for="inputEmail2" class="sr-only">email</label>
+        <input type="text" name="inputEmail2" id="inputEmail2" class="form-control" placeholder="email" required>
+
       	<button id="btnDeleteUser" class="btn btn-lg btn-primary btn-block" type ="button">Delete user</button>
 	</form>
       </div>
@@ -46,6 +56,44 @@
       </footer>
  
     </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+$(function() {
+    $('#btnSavePassword').click(function() {
+
+        $.ajax({
+            url: '/savePassword',
+            data: $('#form-account').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});   
+
+
+$(function() {
+    $('#btnDeleteUser').click(function() {
+
+        $.ajax({
+            url: '/deleteUser',
+            data: $('#form-account-2').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+  </script>
   </body>
 </html>
 

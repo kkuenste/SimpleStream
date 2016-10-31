@@ -7,7 +7,7 @@ mysql = MySQL()
 # MySQL configs
 app.config['MYSQL_DATABASE_USER'] = 'kkuenste'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'pw'
-app.config['MYSQL_DATABASE_DB'] = 'teamnull'i
+app.config['MYSQL_DATABASE_DB'] = 'teamnull'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
@@ -31,22 +31,49 @@ def signUp():
 	_password = request.form['inputPassword']
 	
 	if _fname and _lname and _email and _password:
-		return json.dumps({'html':'<span>All fields pass.</span>'})
+                cursor.callproc('sp_createUser', (_fname, _lname, _email, _password))
+                data = cursor.fetchall()
+                if len(data) is 0:
+                        conn.commit()
+
+                return json.dumps({'html':'<span>All fields pass.</span>'})
 	else:
 		return json.dumps({'html':'<span>Enter the required fields</span>'})	
-	cursor.callproc('sp_createUser', (_fname, _lname, _email, _password))
-	data = cursor.fetchall()
-	if len(data) is 0:
-		conn.commit()
-		return json.dumps({'message':'User created successfully'})
-	else:
-		return json.dumps({'error':str(data[0])})
-
 
 @app.route('/showAccount')
-def showAccountDetails():
+def showAccountDetails():        
 	return render_template('account.html')
 
+@app.route('/savePassword', methods=['POST'])
+def savePassword():
+        _email = request.form['inputEmail']
+        _pass = request.form['inputPassword']
+
+	if _email and _pass:
+		cursor.callproc('sp_updatePassword', (_email, _pass))
+               	data = cursor.fetchall()
+                if len(data) is 0:
+                        conn.commit()
+
+                return json.dumps({'html':'<span>All fields pass.</span>'})
+        else:
+                return json.dumps({'html':'<span>Enter the required fields</span>'})
+
+
+
+@app.route('/deleteUser', methods=['POST'])
+def deleteUser():
+        _email = request.form['inputEmail2']
+
+        if _email:
+                cursor.callproc('sp_deleteUser', (_email))
+                data = cursor.fetchall()
+                if len(data) is 0:
+                        conn.commit()
+
+                return json.dumps({'html':'<span>All fields pass.</span>'})
+        else:
+                return json.dumps({'html':'<span>Enter the required fields</span>'})
 
 if __name__ == "__main__":
 	app.run()
