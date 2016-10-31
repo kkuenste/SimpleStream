@@ -45,7 +45,11 @@ def signUp():
 
 @app.route('/showAccount')
 def showAccountDetails():
+        
+
 	return render_template('account.html')
+
+
 
 
 if __name__ == "__main__":
