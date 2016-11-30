@@ -24,7 +24,7 @@
 
           </ul>
         </nav>
-        <h3 class="text-muted">Simple Stream App</h3>
+        <h3 class="text-muted">Simple Stream</h3>
       </div>
  
       <div class="jumbotron">
@@ -47,9 +47,30 @@
 
       	<button id="btnDeleteUser" class="btn btn-lg btn-primary btn-block" type ="button">Delete user</button>
 	</form>
+
+	<form id="form-account-3">
+	<label for="inputName" class="sr-only">Name</label>
+        <input type="text" name="inputName" id="inputName" class="form-control" placeholder="firstname" required>
+
+        <button  id="btnShowNames" class="btn btn-lg btn-primary btn-block" type ="button">Show Names</button>
+	</form>
       </div>
- 
-       
+
+      <!--
+      <div id="names">
+	{% for message in get_flashed_messages()%}
+	  {{ message|safe }}
+	{% endfor %}
+      </div>
+      -->
+
+      <h1> Names: <div id="nametest"></div> </h1>
+      
+      <div class="flashes">
+	{% for message in get_flashed_messages() %}
+	{{ message }}
+	{% endfor %}
+      </div>
  
       <footer class="footer">
         <p>&copy; Team Null 2016</p>
@@ -58,6 +79,7 @@
     </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script>
+
 $(function() {
     $('#btnSavePassword').click(function() {
 
@@ -92,6 +114,26 @@ $(function() {
         });
     });
 });
+
+$(function() {
+    $('#btnShowNames').click(function() {
+      
+
+        $.ajax({
+            url: '/showNames',
+            data: $('#form-account-3').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+		$("#nametest").text(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
 
   </script>
   </body>
