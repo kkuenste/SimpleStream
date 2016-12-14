@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Simple Stream</title>
+
+	<link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css"  rel="stylesheet">
+</head>
+
+<body>
+	<div class="container">
+		<div class="header">
+			<nav>
+				<ul class="nav nav-pills pull-right">
+				  <li role="presentation" class="active"><a href="#">Stream</a></li>
+				  <li role="presentation"><a href="showAccount">Account</a></li>
+				  <!--
+					<li role="presentation"><a href="index">Home</a>
+                                        </li>
+					<li role="presentation"><a href="#">Sign In</a>
+					</li>
+					<li role="presentation"><a href="showSignUp">Sign Up</a>
+                                        </li>
+					<li role="presentation"><a href="showAccount">Account</a>
+					</li>
+					<li role="presentation" class="active"><a href="#">Stream</a>
+                                        </li>
+					-->
+				</ul>
+			</nav>
+			<h3 class="text-muted">Simple Stream</h3>
+		</div>
+		
+		<h1>Select Number of Posts</h1>
+		<select id="numPosts">
+		  <option value=5>5</option>
+		  <option value=10 selected>10</option>
+		  <option value=20>20</option>
+		  <option value=40>40</option>
+		</select>
+
+		<!--
+		<form id="form-search">
+		  <input type="text" name="inputSearch" id="inputSearch" placeholder="preferences..." required><button id="btnSearch" type ="button">Search Preferences</button>
+		</form>
+		-->
+		<div id="posts"></div>
+		
+
+		<footer class="footer">
+			<p>&copy; Team Null 2016</p>
+		</footer>
+	</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+$(function() {
+  $('#numPosts').change(function() {
+
+    $.ajax({
+            url: '/numPosts',
+            data: $('#numPosts').find(":selected").text(), //$('#n').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+$( document ).ready(function() {
+     $.ajax({
+            url: '/test',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        }); 
+});
+
+</script>
+
+</body>
+</html>

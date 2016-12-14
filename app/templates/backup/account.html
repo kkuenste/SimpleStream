@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Python Flask Bucket List App</title>
+ 
+    
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/signup.css" rel="stylesheet">
+    
+  </head>
+ 
+  <body>
+ 
+    <div class="container">
+      <div class="header">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="main">Home</a></li>
+            <li role="presentation"><a href="#">Sign In</a></li>
+            <li role="presentation"><a href="showSignUp">Sign Up</a></li>
+	    <li role="presentation" class="active"><a href="#">Account</a></li>
+
+          </ul>
+        </nav>
+        <h3 class="text-muted">Simple Stream</h3>
+      </div>
+ 
+      <div class="jumbotron">
+        <h1>Account</h1>
+        <form id="form-account">
+  
+
+	<label for="inputPassword" class="sr-only">New Password</label>
+        <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="New Password" required>
+
+	<label for="inputEmail" class="sr-only">email</label>
+        <input type="text" name="inputEmail" id="inputEmail" class="form-control" placeholder="email" required>
+   
+        <button id="btnSavePassword" class="btn btn-lg btn-primary btn-block" type="button">Save password</button>
+	</form>
+
+	<form id="form-account-2">
+	<label for="inputEmail2" class="sr-only">email</label>
+        <input type="text" name="inputEmail2" id="inputEmail2" class="form-control" placeholder="email" required>
+
+      	<button id="btnDeleteUser" class="btn btn-lg btn-primary btn-block" type ="button">Delete user</button>
+	</form>
+
+	<form id="form-account-3">
+	<label for="inputName" class="sr-only">Name</label>
+        <input type="text" name="inputName" id="inputName" class="form-control" placeholder="firstname" required>
+
+        <button  id="btnShowNames" class="btn btn-lg btn-primary btn-block" type ="button">Show Names</button>
+	</form>
+      </div>
+
+      <!--
+      <div id="names">
+	{% for message in get_flashed_messages()%}
+	  {{ message|safe }}
+	{% endfor %}
+      </div>
+      -->
+
+      <h1> Names: <div id="nametest"></div> </h1>
+      
+      <div class="flashes">
+	{% for message in get_flashed_messages() %}
+	{{ message }}
+	{% endfor %}
+      </div>
+ 
+      <footer class="footer">
+        <p>&copy; Team Null 2016</p>
+      </footer>
+ 
+    </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+
+$(function() {
+    $('#btnSavePassword').click(function() {
+
+        $.ajax({
+            url: '/savePassword',
+            data: $('#form-account').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});   
+
+
+$(function() {
+    $('#btnDeleteUser').click(function() {
+
+        $.ajax({
+            url: '/deleteUser',
+            data: $('#form-account-2').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+$(function() {
+    $('#btnShowNames').click(function() {
+      
+
+        $.ajax({
+            url: '/showNames',
+            data: $('#form-account-3').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+		$("#nametest").text(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+
+  </script>
+  </body>
+</html>
+

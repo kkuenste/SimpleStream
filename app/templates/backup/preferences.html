@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Simple Stream</title>
+ 
+    
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/signup.css" rel="stylesheet">
+    
+  </head>
+ 
+  <body>
+ 
+    <div class="container">
+      <div class="header">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+	    <li role="presentation" class="active"><a href="#">Account</a></li>
+	    <li role="presentation" ><a href="stream">Stream</a></li>
+	    <!--
+            <li role="presentation" ><a href="main">Home</a></li>
+            <li role="presentation"><a href="account">Sign In</a></li>
+            <li role="presentation"><a href="signup">Sign Up</a></li>
+	    <li role="presentation"><a href="showAccount">Account</a></li>
+	    -->
+          </ul>
+        </nav>
+        <h3 class="text-muted">Simple Stream</h3>
+      </div>
+ 
+      <div class="jumbotron">
+        <h1>Account Settings</h1>
+        <form id="newPassword">
+	  <h3>Set New Password</h3>
+          <label for="inputNewPassword" class="sr-only">Set New Password</label>
+          <input type="password" name="inputNewPassword" id="inputNewPassword" class="form-control" placeholder="New Password" required autofocus>
+	  <button id="btnNewPassword" type="button">Save</button>
+	</form>
+	<hr><br>
+
+
+	<form id="preferences">
+	  <h3>Change Preferences</h3>
+	  <p>Added Preferences</p><textarea id="prefList" rows="4" cols="50" readonly></textarea>
+	  <input type="name" name="inputNewPref" id="inputNewPref" class="form-control" placeholder="New Preference" autofocus>
+	  <button id="btnClear" type="button">Clear All</button>
+	  <button id="btnAddPref" type="button">Add</button>
+	</form>
+	<hr><br>
+
+	<form id="emailStream">
+	  <h3>Send Posts to Email?</h3>
+	  Receive Email? <select name="emailCheck" id="emailCheck" form="emailStream">
+            <option value=1>Yes</option>
+            <option value=0 selected>No</option>
+          </select><br>
+	  Frequency <select name="emailFreq" id="emailFreq" form="emailStream">
+	    <option value=1 selected>Once per week</option>
+	    <option value=2>Twice per week</option>
+	    <option value=3>Three times per week</option>
+	    <option value=7>Every day</option>
+	  </select><br>
+
+	  # of posts <select name = "numPosts" id="numPosts" form="emailStream">
+	    <option value=1>One</option>
+	    <option value=3 selected>Three</option>
+	    <option value=5>Five</option>
+	    <option value=10>Ten</option>
+	  </select>
+	  
+	  <br>
+	  <button id="btnEmailPref" type="button">Save</button>
+	</form>
+	<hr><br>
+	
+	<h3>Other</h3>
+	<button id="btnDlt" class="btn btn-primary" type="button">Delete Account</button>
+	<button id="btnLogOut" class="btn btn-primary" type="button">Log Out</button>
+
+
+      </div>
+ 
+       
+ 
+      <footer class="footer">
+        <p>&copy; Team Null 2016</p>
+      </footer>
+ 
+    </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+
+$( document ).ready(function() {
+          $.ajax({
+            url: '/loadPreferences',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                $('#prefList').append(response); 
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+});
+
+$(function() {
+    $('#btnNewPassword').click(function() {
+
+        $.ajax({
+            url: '/newPassword',
+            data: $('#newPassword').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        $('#newPassword').children('input').val('')
+    });
+});
+
+$(function() {
+    $('#btnClear').click(function() {
+
+        $.ajax({
+            url: '/clearPreferences',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                $("#prefList").val('');
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+$(function() {
+    $('#btnAddPref').click(function() {
+
+
+        $.ajax({
+            url: '/addPreference',
+            data: $('#preferences').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                if (response != "exists") {
+                  var val = $('#prefList').val();
+                  $('#prefList').val(val + response + "\n");
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        $('#preferences').children('input').val('')
+    });
+});
+
+$(function() {
+    $('#btnEmailPref').click(function() {
+
+        $.ajax({
+            url: '/saveEmailPreferences',
+            data: $('#emailStream').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+$(function() {
+    $('#btnDlt').click(function() {
+
+        $.ajax({
+            url: '/deleteAccount',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                window.location = response;
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+$(function() {
+    $('#btnLogOut').click(function() {
+
+        $.ajax({
+            url: '/logOut',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                window.location = response;
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+  </script>
+  </body>
+</html>
+
