@@ -3,42 +3,140 @@
 
 <head>
 	<title>Simple Stream</title>
+	
 
 	<link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css"  rel="stylesheet">
+	<link href="../static/stream.css" rel="stylesheet">
 </head>
 
 <body>
 	<div class="container">
+	  <div id="fullheader">
 		<div class="header">
 			<nav>
 				<ul class="nav nav-pills pull-right">
-					<li role="presentation"><a href="index">Home</a>
-                                        </li>
-					<li role="presentation"><a href="#">Sign In</a>
-					</li>
-					<li role="presentation"><a href="showSignUp">Sign Up</a>
-                                        </li>
-					<li role="presentation"><a href="showAccount">Account</a>
-					</li>
-					<li role="presentation" class="active"><a href="#">Stream</a>
-                                        </li>
+				  <li role="presentation" class="active"><a href="#">Stream</a></li>
+				  <li role="presentation"><a href="showAccount">Account</a></li>
 				</ul>
 			</nav>
 			<h3 class="text-muted">Simple Stream</h3>
 		</div>
-		
-		<h1>Hey</h1>
 
-		<form id="form-search">
-		  <input type="text" name="inputSearch" id="inputSearch" placeholder="preferences..." required><button id="btnSearch" type ="button">Search Preferences</button>
-		</form>
-
-		
-
-		<footer class="footer">
-			<p>&copy; Team Null 2016</p>
-		</footer>
+		<!-- Get Number of Posts -->
+		<div id="selector">
+		  <form id="numberPosts">
+		    Select Number of Posts  <select name="numPosts" id="numPosts" form="numberPosts">
+		      <option value=5>5</option>
+		      <option value=10 selected>10</option>
+		      <option value=20>20</option>
+		      <option value=40>40</option>
+		    </select>
+		  </form>
+		</div>
+	  </div>
 	</div>
+		
+	<!-- Store Posts -->
+	<br>
+	<div id="posts">
+	  <ul>
+	  </ul>  
+	</div>
+		
+
+	<footer id="foot">
+	  <center>&copy; Team Null 2016</center>
+	</footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+$(function() {
+  $('#numPosts').change(function() {
+   console.log($('#numberPosts').serialize());
+
+    $.ajax({
+            url: '/populateStream',
+            data: $('#numberPosts').serialize(),
+            type: 'POST',
+            success: function(response) {
+                
+                // get json object
+                obj = JSON.parse(response);
+                console.log(obj);
+
+                // clear posts
+                $("#posts ul").empty();
+ 
+                // populate stream page
+                var num = $("#numPosts").val();
+                for (var i=1; i<=num; i++) {
+		   var img_link= obj[i.toString()]["thumbnail"];
+	           if (img_link.substring(0,3) != "htt") {
+		     img_link ="https://upload.wikimedia.org/wikipedia/commons/f/fb/Emoji_u1f4be.svg";
+                   }
+		   var score = "<div class='scoreClass'>" + obj[i.toString()]["score"] + "</div>"
+                   var img = "<div class='imageClass'><a target='_blank' href='" + obj[i.toString()]["url"] + "'>" + "<img src='" + img_link + "'/></a></div>";
+		   var link = "<a target='_blank' href='" + obj[i.toString()]["url"] + "'>" + obj[i.toString()]["title"] + "</a>";
+		   var text = "<div class='textClass'>" + link + "<br> Subreddit: " + obj[i.toString()]["subreddit"] + "     Author: " + obj[i.toString()]["author"] + "</div>"; 
+                  $("#posts ul").append("<li class='parentClass'>" + score + img + text + "</li><hr>");
+
+	        }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+});
+
+$( document ).ready(function() {
+                // clear posts
+                $("#posts ul").empty();
+
+                // populate stream page
+                var num = $("#numPosts").val();
+                for (var i=1; i<=3; i++) {
+                   var score = "<div class='scoreClass'>3454</div>"
+                   var img = "<div class='imageClass'><a target='_blank' href='https://getuikit.com/docs/images/placeholder_600x400.svg'>" + "<img src='https://upload.wikimedia.org/wikipedia/commons/f/fb/Emoji_u1f4be.svg'/></a></div>";
+                   var link = "<a target='_blank' href='https://www.facebook.com/'>This is a link test to check if this is working ignore datascience project is due kind of soon</a>";
+                   var text = "<div class='textClass'>" + link + "<br> Subreddit: askReddit     Author: TylerSammons</div>";
+                  $("#posts ul").append("<li class='parentClass'>" + score + img + text + "</li><hr>");
+
+                }
+});
+$( document ).ready(function() {
+     $.ajax({
+            url: '/populateStream',
+            data: $('#numberPosts').serialize(),
+            type: 'POST',
+            success: function(response) {
+                // clear posts
+		obj = JSON.parse(response);
+                $("#posts ul").empty();
+
+                // populate stream page
+                var num = $("#numPosts").val();
+                for (var i=1; i<=num; i++) {
+                   var score = "<div class='scoreClass'>" + obj[i.toString()]["score"] + "</div>"
+		   var img_link = obj[i.toString()]["thumbnail"];
+		   console.log(img_link);
+		   if (img_link.substring(0,3) != "htt") {
+		     img_link = "https://upload.wikimedia.org/wikipedia/commons/f/fb/Emoji_u1f4be.svg";
+	           }
+                   var img = "<div class='imageClass'><a target='_blank' href='" + obj[i.toString()]["url"] + "'>" + "<img src='" + img_link + "'/></a></div>";
+                   var link = "<a target='_blank' href='" + obj[i.toString()]["url"] + "'>" + obj[i.toString()]["title"] + "</a>";
+                   var text = "<div class='textClass'>" + link + "<br> Subreddit: " + obj[i.toString()]["subreddit"] + "     Author: " + obj[i.toString()]["author"] + "</div>";
+                  $("#posts ul").append("<li class='parentClass'>" + score + img + text + "</li><hr>");
+                }				    
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        }); 
+});
+
+</script>
+
 </body>
 </html>
